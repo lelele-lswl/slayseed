@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "comments", indexes = {
     @Index(name = "idx_seed", columnList = "seed_id"),
     @Index(name = "idx_author", columnList = "author_id"),
-    @Index(name = "idx_created", columnList = "createdAt")
+    @Index(name = "idx_created", columnList = "created_at")
 })
 public class Comment {
 
@@ -23,7 +23,7 @@ public class Comment {
 
     @NotBlank
     @Size(min = 1, max = 1000)
-    @Column(nullable = false, length = 1000)
+    @Column(name = "content", nullable = false, length = 1000)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,6 +35,6 @@ public class Comment {
     private User author;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

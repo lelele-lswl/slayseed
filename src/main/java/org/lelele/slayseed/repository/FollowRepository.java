@@ -16,8 +16,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     Optional<Follow> findByFollowerIdAndFollowingId(Long followerId, Long followingId);
     boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
     void deleteByFollowerIdAndFollowingId(Long followerId, Long followingId);
-    Page<Follow> findByFollowerIdOrderByCreatedAtDesc(Long followerId, Pageable pageable);
-    Page<Follow> findByFollowingIdOrderByCreatedAtDesc(Long followingId, Pageable pageable);
+    @Query("SELECT f FROM Follow f LEFT JOIN FETCH f.follower WHERE f.following.id = :followingId ORDER BY f.createdAt DESC")
+    Page<Follow> findByFollowingIdOrderByCreatedAtDesc(@Param("followingId") Long followingId, Pageable pageable);
+
+    @Query("SELECT f FROM Follow f LEFT JOIN FETCH f.following WHERE f.follower.id = :followerId ORDER BY f.createdAt DESC")
+    Page<Follow> findByFollowerIdOrderByCreatedAtDesc(@Param("followerId") Long followerId, Pageable pageable);
     long countByFollowerId(Long followerId);
     long countByFollowingId(Long followingId);
 

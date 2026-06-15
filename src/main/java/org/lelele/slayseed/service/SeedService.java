@@ -84,7 +84,7 @@ public class SeedService {
 
     @Transactional
     public SeedDTO getSeedById(Long id, Long currentUserId, String clientIp) {
-        Seed seed = seedRepository.findById(id).orElse(null);
+        Seed seed = seedRepository.findByIdWithAuthor(id).orElse(null);
         if (seed == null) return null;
 
         boolean shouldIncrement = true;

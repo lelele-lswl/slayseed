@@ -29,6 +29,6 @@ public class Favorite {
     private Seed seed;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

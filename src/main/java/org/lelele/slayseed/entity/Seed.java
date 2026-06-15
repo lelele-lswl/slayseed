@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
     @Index(name = "idx_players", columnList = "player_count"),
     @Index(name = "idx_type", columnList = "seed_type"),
     @Index(name = "idx_author", columnList = "author_id"),
-    @Index(name = "idx_created", columnList = "createdAt"),
+    @Index(name = "idx_created", columnList = "created_at"),
     @Index(name = "idx_likes", columnList = "likes"),
-    @Index(name = "idx_seedcode", columnList = "seedCode")
+    @Index(name = "idx_seedcode", columnList = "seed_code")
 })
 public class Seed {
 
@@ -27,51 +27,51 @@ public class Seed {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, length = 200)
+    @Column(name = "seed_code", nullable = false, length = 200)
     private String seedCode;
 
     @NotBlank
-    @Column(nullable = false, length = 50)
+    @Column(name = "tower", nullable = false, length = 50)
     private String tower;
 
     @NotBlank
-    @Column(nullable = false, length = 50)
+    @Column(name = "tower_character", nullable = false, length = 50)
     private String towerCharacter;
 
-    @Column(length = 20)
+    @Column(name = "player_count", length = 20)
     private String playerCount;
 
-    @Column(length = 50)
+    @Column(name = "seed_type", length = 50)
     private String seedType;
 
     @NotBlank
-    @Column(nullable = false, length = 2000)
+    @Column(name = "description", nullable = false, length = 2000)
     private String description;
 
-    @Column(length = 500)
+    @Column(name = "tags", length = 500)
     private String tags;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(nullable = false)
+    @Column(name = "likes", nullable = false)
     private Integer likes = 0;
 
-    @Column(nullable = false)
+    @Column(name = "views", nullable = false)
     private Integer views = 0;
 
-    @Column(nullable = false)
+    @Column(name = "comment_count", nullable = false)
     private Integer commentCount = 0;
 
-    @Column(nullable = false)
+    @Column(name = "favorite_count", nullable = false)
     private Integer favoriteCount = 0;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
