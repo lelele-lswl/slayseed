@@ -21,7 +21,10 @@ public class JwtTokenUtil {
     private Long expiration;
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        String key = (secret == null || secret.isEmpty())
+                ? "slayseed-default-jwt-secret-key-change-in-production-env-please-0123456789"
+                : secret;
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
             byte[] padded = new byte[32];
             System.arraycopy(keyBytes, 0, padded, 0, keyBytes.length);

@@ -281,7 +281,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue'
+import { ref, computed, onMounted, reactive, watch } from 'vue'
 import SeedCard from './components/SeedCard.vue'
 import { auth, seedsApi, usersApi, commentsApi } from './api'
 
@@ -356,6 +356,11 @@ const newComment = ref('')
 const profileUser = ref(null)
 const profileTab = ref('seeds')
 const isFollowingProfile = ref(false)
+
+watch(profileTab, () => {
+  page.value = 0
+  loadSeeds()
+})
 
 const currentCharacterOptions = computed(() => {
   if (filters.tower === '塔2') return TOWER2_CHARS
@@ -468,6 +473,7 @@ function handleSeedLiked(seed, liked) {
 }
 function handleSeedFavorited(seed, favorited) {
   seed.favoritedByCurrentUser = favorited
+  seed.favoriteCount = (seed.favoriteCount || 0) + (favorited ? 1 : -1)
 }
 
 function doLogin() {
@@ -545,6 +551,7 @@ function doFavoriteDetail() {
   if (!currentUser.value) { showLogin.value = true; return }
   seedsApi.favoriteSeed(currentSeed.value.id).then(res => {
     currentSeed.value.favoritedByCurrentUser = res.favorited
+    currentSeed.value.favoriteCount = (currentSeed.value.favoriteCount || 0) + (res.favorited ? 1 : -1)
   })
 }
 function deleteCurrentSeed() {

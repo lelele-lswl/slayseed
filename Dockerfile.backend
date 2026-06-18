@@ -1,0 +1,25 @@
+# ============================================
+#  Slay Seed 后端 Docker 镜像
+#  基于 OpenJDK 17 (Alpine, 更小)
+# ============================================
+
+FROM eclipse-temurin:17-jre-alpine
+
+LABEL maintainer="SlaySeed"
+LABEL description="Slay Seed Spring Boot Backend"
+
+# 创建工作目录
+WORKDIR /app
+
+# 时区设置
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+
+# 复制 jar 包（由 maven 打包后生成）
+COPY target/*.jar app.jar
+
+# 暴露端口
+EXPOSE 8080
+
+# 启动命令
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -18,7 +18,7 @@
       </div>
       <div class='form-group'>
         <label>描述</label>
-        <textarea v-model='seed.description' required placeholder='描述这个种子的特点...' rows='3'></textarea>
+        <textarea v-model='seed.description' required placeholder='描述这个种子的特点和游戏版本...' rows='3'></textarea>
       </div>
       <div class='form-group'>
         <label>标签（用逗号分隔）</label>

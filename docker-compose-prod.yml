@@ -1,0 +1,87 @@
+# ============================================
+#  Slay Seed 生产环境部署 (Docker Compose)
+#  从镜像仓库拉取已有镜像，不做本地构建
+#  使用方法：
+#    docker compose -f docker-compose-prod.yml up -d
+# ============================================
+
+services:
+
+  # ---------- MySQL 数据库 ----------
+  mysql:
+    image: mysql:8.0
+    container_name: slayseed-mysql
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-slayseed123}
+      MYSQL_DATABASE: slayseed
+    volumes:
+      - slayseed-mysql:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_PASSWORD:-slayseed123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------- Redis 缓存 ----------
+  redis:
+    image: redis:7-alpine
+    container_name: slayseed-redis
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - slayseed-redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------- Spring Boot 后端 (从镜像仓库拉取) ----------
+  backend:
+    image: ${IMAGE_REGISTRY:-registry.cn-hangzhou.aliyuncs.com}/slayseed/backend:${IMAGE_TAG:-latest}
+    container_name: slayseed-backend
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/slayseed?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-slayseed123}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD:
+      SERVER_PORT: 8080
+      CORS_ALLOWED_ORIGINS: "*"
+      JASYPT_ENCRYPTOR_KEY: ${JASYPT_ENCRYPTOR_KEY:-slayseed-default-key}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - slayseed-logs:/logs
+
+  # ---------- Vue3 前端 + Nginx (从镜像仓库拉取) ----------
+  frontend:
+    image: ${IMAGE_REGISTRY:-registry.cn-hangzhou.aliyuncs.com}/slayseed/frontend:${IMAGE_TAG:-latest}
+    container_name: slayseed-frontend
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+# ---------- 数据卷（持久化）----------
+volumes:
+  slayseed-mysql:
+  slayseed-redis:
+  slayseed-logs:
