@@ -22,7 +22,7 @@ public class JwtTokenUtil {
 
     private SecretKey getSigningKey() {
         String key = (secret == null || secret.isEmpty())
-                ? "slayseed-default-jwt-secret-key-change-in-production-env-please-0123456789"
+                ? "CHANGE-ME-jwt-secret-key-must-be-set-via-env-or-properties"
                 : secret;
         byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {

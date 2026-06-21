@@ -14,10 +14,10 @@ StandardError=append:/var/log/slayseed/backend-error.log
 
 # 环境变量 - 按需修改
 Environment="JAVA_OPTS=-Xms512m -Xmx1024m
-Environment="JASYPT_ENCRYPTOR_KEY=your-encryptor-key"
+Environment="JASYPT_ENCRYPTOR_KEY=${JASYPT_ENCRYPTOR_KEY}"
 Environment="SPRING_DATASOURCE_URL=jdbc:mysql://127.0.0.1:3306/slayseed?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
 Environment="SPRING_DATASOURCE_USERNAME=root"
-Environment="SPRING_DATASOURCE_PASSWORD=your-db-password"
+Environment="SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}"
 Environment="SPRING_DATA_REDIS_HOST=127.0.0.1"
 Environment="SPRING_DATA_REDIS_PORT=6379"
 Environment="SPRING_DATA_REDIS_PASSWORD="

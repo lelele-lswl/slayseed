@@ -10,7 +10,7 @@
 
 set -e
 
-SERVER=${1:-"116.62.47.66"}
+SERVER=${1:-"${SERVER_IP:-116.62.47.66}"}
 USER="root"
 DEPLOY_DIR="/opt/slayseed"
 

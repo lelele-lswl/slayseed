@@ -12,7 +12,7 @@ set -e
 SERVER=${1:?"请提供服务器IP，用法: bash deploy-docker.sh <服务器IP> [镜像标签]"}
 IMAGE_TAG=${2:-latest}
 USER="root"
-IMAGE_REGISTRY="registry.cn-hangzhou.aliyuncs.com"
+IMAGE_REGISTRY=${IMAGE_REGISTRY:-"registry.cn-hangzhou.aliyuncs.com"}
 NAMESPACE="slayseed"
 DEPLOY_DIR="/opt/slayseed"
 
@@ -62,14 +62,21 @@ echo "[6/8] 上传部署文件到服务器..."
 ssh ${USER}@${SERVER} "mkdir -p ${DEPLOY_DIR}"
 scp docker-compose-prod.yml ${USER}@${SERVER}:${DEPLOY_DIR}/docker-compose.yml
 
-cat > /tmp/slayseed-env <<EOF
+if [ -f .env ]; then
+  scp .env ${USER}@${SERVER}:${DEPLOY_DIR}/.env
+  echo "已上传本地 .env 文件"
+else
+  echo "⚠️  未找到本地 .env 文件，将生成默认配置"
+  cat > /tmp/slayseed-env <<EOF
 IMAGE_REGISTRY=${IMAGE_REGISTRY}
 IMAGE_TAG=${IMAGE_TAG}
 MYSQL_PASSWORD=your-strong-password-here
 JASYPT_ENCRYPTOR_KEY=your-encryptor-key-here
 EOF
-scp /tmp/slayseed-env ${USER}@${SERVER}:${DEPLOY_DIR}/.env
-rm -f /tmp/slayseed-env
+  scp /tmp/slayseed-env ${USER}@${SERVER}:${DEPLOY_DIR}/.env
+  rm -f /tmp/slayseed-env
+  echo "⚠️  请登录服务器修改 ${DEPLOY_DIR}/.env 中的密码和密钥！"
+fi
 echo "文件上传完成"
 
 echo ""
