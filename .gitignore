@@ -71,7 +71,6 @@ replay_pid*
 
 ### Maven ###
 .mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
 
 ### 包锁文件（可选，按团队约定） ###
 # frontend/package-lock.json
