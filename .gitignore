@@ -45,11 +45,40 @@ data/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
 
-### Docker 构建产物 ###
+### Docker 镜像文件（体积大且含构建产物）###
 *.tar
 *.tar.gz
+backend.tar
+frontend.tar
+
+### Docker 服务器/生产部署配置（含服务器IP、镜像仓库地址等敏感信息）###
+docker-compose-server.yml
+docker-compose-prod.yml
 docker-compose.override.yml
+
+### Docker daemon 配置（含镜像源等本地私有配置）###
+daemon.json
+
+### 密钥与证书文件（绝不能上传）###
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.crt
+*.cer
+*.p7b
+*.p7c
+id_rsa
+id_ed25519
+*.pub
+ssh_config
+known_hosts
 
 ### 日志文件 ###
 *.log

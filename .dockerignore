@@ -1,0 +1,50 @@
+# ============================================
+#  Docker 构建上下文排除文件
+#  避免将无用文件发送给 Docker 守护进程
+#  显著加速构建速度、减小上下文体积
+# ============================================
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+*.iws
+*.ipr
+
+# 前端依赖和构建产物（Dockerfile.frontend 会自己构建）
+frontend/node_modules
+frontend/dist
+frontend/.vite
+
+# 后端构建产物（Dockerfile.backend 会自己构建）
+target/
+
+# 数据库文件
+data/
+
+# 日志
+*.log
+logs/
+
+# 环境变量（敏感信息）
+.env
+.env.local
+.env.*.local
+
+# Docker 相关
+docker-compose.override.yml
+*.tar
+*.tar.gz
+
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 文档
+*.md
+!deploy/README.md

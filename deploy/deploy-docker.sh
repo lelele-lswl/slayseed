@@ -71,7 +71,7 @@ else
 IMAGE_REGISTRY=${IMAGE_REGISTRY}
 IMAGE_TAG=${IMAGE_TAG}
 MYSQL_PASSWORD=your-strong-password-here
-JASYPT_ENCRYPTOR_KEY=your-encryptor-key-here
+JWT_SECRET=your-jwt-secret-key-at-least-32-chars
 EOF
   scp /tmp/slayseed-env ${USER}@${SERVER}:${DEPLOY_DIR}/.env
   rm -f /tmp/slayseed-env
